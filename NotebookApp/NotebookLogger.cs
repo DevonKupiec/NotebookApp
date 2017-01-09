@@ -16,12 +16,12 @@ namespace NotebookApp
             trackedNotebook.loggingToggled += ToggleLogging;
         }
 
-        private void PrintAdded(string typeItemAdded)
+        public void PrintAdded(string typeItemAdded)
         {
             Console.WriteLine(typeItemAdded + " was added to the notebook.");
         }
 
-        private void PrintDeleted(string idOfDeleted)
+        public void PrintDeleted(string idOfDeleted)
         {
             if (idOfDeleted != "")
                 Console.WriteLine("Item " + idOfDeleted + " was deleted.");
@@ -29,7 +29,7 @@ namespace NotebookApp
                 Console.WriteLine("Everything was deleted.");
         }
 
-        private void IncorrectCommand(string messageToPrint)
+        private static void IncorrectCommand(string messageToPrint)
         {
             Console.WriteLine("Bad Command: " + messageToPrint);
         }
