@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NotebookApp {
-    class Image : IPageable {
-        private PageData myData;
+namespace NotebookApp
+{
+    internal class Image : IPageable
+    {
         private string asciiImage;
+        private PageData myData;
 
-        public IPageable Input() {
+        public IPageable Input()
+        {
             Console.WriteLine("Please input your name");
             myData.author = Console.ReadLine();
             Console.WriteLine("Please input the message title");
@@ -17,10 +16,11 @@ namespace NotebookApp {
 
             Console.WriteLine("Start inputting your image, Press enter to create as many lines as you like");
             Console.WriteLine("Press Ctrl+D then enter on a single line to stop creating your image");
-            bool finishedImage = false;
-            while (!finishedImage) {
-                string input = Console.ReadLine();
-                if ((input.Length > 0) && input[0] == 4)
+            var finishedImage = false;
+            while (!finishedImage)
+            {
+                var input = Console.ReadLine() ?? "";
+                if ((input.Length > 0) && (input[0] == 4))
                     finishedImage = true;
                 else
                     asciiImage += "\t" + input + "\n";
@@ -28,7 +28,8 @@ namespace NotebookApp {
             return this;
         }
 
-        public void Output() {
+        public void Output()
+        {
             Console.WriteLine();
             Console.WriteLine("/-------------------- Message --------------------\\");
             Console.WriteLine(" Title: " + myData.title);
@@ -38,7 +39,8 @@ namespace NotebookApp {
             Console.WriteLine("\\------------------------------------------------/");
         }
 
-        public PageData MyData {
+        public PageData MyData
+        {
             get { return myData; }
             set { myData = value; }
         }
