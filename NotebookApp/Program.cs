@@ -12,8 +12,9 @@ namespace NotebookApp
             var notebookLogger = new NotebookLogger(notebook);
 
             const string ExitProgramKeyword = "exit";
-            var commandPrompt = "\nPlease enter " + notebook.show + ", " + notebook.delete + ", " + notebook._new +
-                                " or " + notebook.log + "\n";
+            var commandPrompt = "\nPlease enter " + notebook.show + ", "
+                                + notebook.delete + ", " + notebook._new
+                                + " or " + notebook.log + "\n";
 
             Console.WriteLine(Notebook.IntroMessage);
             Console.WriteLine(commandPrompt);
@@ -21,7 +22,7 @@ namespace NotebookApp
             var input = "";
             do
             {
-                input = Console.ReadLine();
+                input = Console.ReadLine() ?? "";
                 var commands = input.Split();
 
                 try
