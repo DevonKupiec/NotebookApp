@@ -10,14 +10,14 @@ namespace NotebookApp {
         public const string IntroMessage = "Welcome to the Notebook program v1";
         public const string OutroMessage = "Thanks for using Notebook program v1";
 
-        List<IPageable> pages = new List<IPageable>();
+        readonly List<IPageable> pages = new List<IPageable>();
 
         public delegate void SimpleFunction(string command);
         public delegate void BooleanFunction(bool isOn);
         public event SimpleFunction ItemAdded, ItemRemoved, InputBadCommand;
         public event BooleanFunction loggingToggled;
 
-        private Dictionary<string, SimpleFunction> commandLineArgs = new Dictionary<string, SimpleFunction>();
+        private readonly Dictionary<string, SimpleFunction> commandLineArgs = new Dictionary<string, SimpleFunction>();
         public readonly string show = "show", _new = "new", delete = "delete", log = "logger";
 
         public SimpleFunction this[string command] {
@@ -36,7 +36,7 @@ namespace NotebookApp {
         /// </summary>
         /// <param name="commandLineKeywords">index 0 = show, 1 = new, 2 = delete</param>
         public Notebook(params string[] commandLineKeywords) : this () {
-            for (int i = 0; i < commandLineKeywords.Length; ++i) {
+            for (var i = 0; i < commandLineKeywords.Length; ++i) {
                 if (commandLineKeywords[i] == "") {
                     continue;
                 }
@@ -68,7 +68,7 @@ namespace NotebookApp {
 
                 case "pages":
                     Console.WriteLine("/--------------------- Pages ---------------------\\");
-                    for (int i = 0; i < pages.Count; i++)
+                    for (var i = 0; i < pages.Count; i++)
                         Console.WriteLine("ID: " + i + " " + pages[i].MyData.title);
                     break;
 
@@ -79,11 +79,11 @@ namespace NotebookApp {
 
                         if (number < pages.Count)
                             pages[number].Output();
-                        else if (InputBadCommand != null)
-                            InputBadCommand("Your number was outside of the available range");
+                        else InputBadCommand?.Invoke
+                                ("Your number was outside of the available range");
                     }
-                    else if (InputBadCommand != null)
-                        InputBadCommand("You didn't enter pages or a valid number");
+                    else InputBadCommand?.Invoke
+                            ("You didn't enter pages or a valid number");
                     break;
             }
         }
@@ -100,28 +100,21 @@ namespace NotebookApp {
 
                 case "message":
                     pages.Add(new TextualMessage().Input());
-
-                    if (ItemAdded != null)
-                        ItemAdded("Textual Message");
+                    ItemAdded?.Invoke("Textual Message");
                     break;
 
                 case "list":
                     pages.Add(new MessageList().Input());
-
-                    if (ItemAdded != null)
-                        ItemAdded("List");
+                    ItemAdded?.Invoke("List");
                     break;
 
                 case "image":
                     pages.Add(new Image().Input());
-
-                    if (ItemAdded != null)
-                        ItemAdded("Image");
+                    ItemAdded?.Invoke("Image");
                     break;
 
                 default:
-                    if (InputBadCommand != null)
-                        InputBadCommand("You didn't enter message, list or image");
+                    InputBadCommand?.Invoke("You didn't enter message, list or image");
                     break;
             }
         }
@@ -136,9 +129,7 @@ namespace NotebookApp {
 
                 case "all":
                     pages.Clear();
-
-                    if (ItemRemoved != null)
-                        ItemRemoved("");
+                    ItemRemoved?.Invoke("");
                     break;
 
                 default:
@@ -147,15 +138,11 @@ namespace NotebookApp {
                     if (int.TryParse(command, out number)) {
                         if (number < pages.Count) {
                             pages.RemoveAt(number);
-
-                            if (ItemRemoved != null)
-                                ItemRemoved(number + "Number");
+                            ItemRemoved?.Invoke(number + "Number");
                         }
-                        else if (InputBadCommand != null)
-                            InputBadCommand("Your number was outside of the range of pages");
+                        else InputBadCommand?.Invoke("Your number was outside of the range of pages");
                     }
-                    else if (InputBadCommand != null)
-                        InputBadCommand("You didn't input all, or your number was outside the range of pages");
+                    else InputBadCommand?.Invoke("You didn't input all, or your number was outside the range of pages");
                     break;
             }
         }
@@ -169,18 +156,15 @@ namespace NotebookApp {
                     break;
 
                 case "on":
-                    if (loggingToggled != null)
-                        loggingToggled(true);
+                    loggingToggled?.Invoke(true);
                     break;
 
                 case "off":
-                    if (loggingToggled != null)
-                        loggingToggled(false);
+                    loggingToggled?.Invoke(false);
                     break;
 
                 default:
-                    if (InputBadCommand != null)
-                        InputBadCommand("Please enter on or off after inputting the log command");
+                    InputBadCommand?.Invoke("Please enter on or off after inputting the log command");
                     break;
             }
         }
