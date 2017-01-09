@@ -1,30 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NotebookApp {
-    class Notebook {
+namespace NotebookApp
+{
+    internal class Notebook
+    {
+        public delegate void BooleanFunction(bool isOn);
+
+        public delegate void SimpleFunction(string command);
 
         public const string IntroMessage = "Welcome to the Notebook program v1";
         public const string OutroMessage = "Thanks for using Notebook program v1";
 
-        readonly List<IPageable> pages = new List<IPageable>();
-
-        public delegate void SimpleFunction(string command);
-        public delegate void BooleanFunction(bool isOn);
-        public event SimpleFunction ItemAdded, ItemRemoved, InputBadCommand;
-        public event BooleanFunction loggingToggled;
-
         private readonly Dictionary<string, SimpleFunction> commandLineArgs = new Dictionary<string, SimpleFunction>();
+
+        private readonly List<IPageable> pages = new List<IPageable>();
         public readonly string show = "show", _new = "new", delete = "delete", log = "logger";
 
-        public SimpleFunction this[string command] {
-            get { return commandLineArgs[command]; }
-        }
-
-        public Notebook() {
+        public Notebook()
+        {
             commandLineArgs.Add(show, Show);
             commandLineArgs.Add(_new, New);
             commandLineArgs.Add(delete, Delete);
@@ -32,16 +26,17 @@ namespace NotebookApp {
         }
 
         /// <summary>
-        /// Creates a new notebook with input keywords for commands instead of default ones
+        ///     Creates a new notebook with input keywords for commands instead of default ones
         /// </summary>
         /// <param name="commandLineKeywords">index 0 = show, 1 = new, 2 = delete</param>
-        public Notebook(params string[] commandLineKeywords) : this () {
-            for (var i = 0; i < commandLineKeywords.Length; ++i) {
-                if (commandLineKeywords[i] == "") {
-                    continue;
-                }
+        public Notebook(params string[] commandLineKeywords) : this()
+        {
+            for (var i = 0; i < commandLineKeywords.Length; ++i)
+            {
+                if (commandLineKeywords[i] == "") continue;
 
-                switch (i) {
+                switch (i)
+                {
                     case 0:
                         commandLineArgs.Remove(show);
                         commandLineArgs.Add(show = commandLineKeywords[i], Show);
@@ -58,8 +53,18 @@ namespace NotebookApp {
             }
         }
 
-        private void Show(string command) {
-            switch (command) {
+        public SimpleFunction this[string command]
+        {
+            get { return commandLineArgs[command]; }
+        }
+
+        public event SimpleFunction ItemAdded , ItemRemoved , InputBadCommand;
+        public event BooleanFunction loggingToggled;
+
+        private void Show(string command)
+        {
+            switch (command)
+            {
                 case "":
                     Console.WriteLine("\nShow commands:");
                     Console.WriteLine("pages        show all pages");
@@ -75,22 +80,23 @@ namespace NotebookApp {
                 default:
                     int number;
 
-                    if (int.TryParse(command, out number)) {
-
+                    if (int.TryParse(command, out number))
                         if (number < pages.Count)
                             pages[number].Output();
-                        else InputBadCommand?.Invoke
+                        else
+                            InputBadCommand?.Invoke
                                 ("Your number was outside of the available range");
-                    }
-                    else InputBadCommand?.Invoke
+                    else
+                        InputBadCommand?.Invoke
                             ("You didn't enter pages or a valid number");
                     break;
             }
         }
 
-        private void New(string command) {
-
-            switch (command) {
+        private void New(string command)
+        {
+            switch (command)
+            {
                 case "":
                     Console.WriteLine("\nNew commands:");
                     Console.WriteLine("message      create new message page");
@@ -119,8 +125,10 @@ namespace NotebookApp {
             }
         }
 
-        private void Delete(string command) {
-            switch (command) {
+        private void Delete(string command)
+        {
+            switch (command)
+            {
                 case "":
                     Console.WriteLine("\nDelete commands:");
                     Console.WriteLine("all              delete all created pages");
@@ -135,20 +143,22 @@ namespace NotebookApp {
                 default:
                     int number;
 
-                    if (int.TryParse(command, out number)) {
-                        if (number < pages.Count) {
+                    if (int.TryParse(command, out number))
+                        if (number < pages.Count)
+                        {
                             pages.RemoveAt(number);
                             ItemRemoved?.Invoke(number + "Number");
                         }
                         else InputBadCommand?.Invoke("Your number was outside of the range of pages");
-                    }
                     else InputBadCommand?.Invoke("You didn't input all, or your number was outside the range of pages");
                     break;
             }
         }
 
-        private void Log(string command) {
-            switch (command) {
+        private void Log(string command)
+        {
+            switch (command)
+            {
                 case "":
                     Console.WriteLine("Logger commands:");
                     Console.WriteLine("on           turn logger on");

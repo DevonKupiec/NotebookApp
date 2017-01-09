@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NotebookApp
 {
-    class TextualMessage : IPageable
+    internal class TextualMessage : IPageable
     {
-        protected PageData myData;
         protected string message;
+        protected PageData myData;
 
-        public virtual IPageable Input() {
+        public virtual IPageable Input()
+        {
             Console.WriteLine("Please input your name");
             myData.author = Console.ReadLine();
             Console.WriteLine("Please input the message title");
@@ -22,7 +19,8 @@ namespace NotebookApp
             return this;
         }
 
-        public void Output() {
+        public void Output()
+        {
             Console.WriteLine();
             Console.WriteLine("/-------------------- Message --------------------\\");
             Console.WriteLine(" Title: " + myData.title);
@@ -36,6 +34,5 @@ namespace NotebookApp
             get { return myData; }
             set { myData = value; }
         }
-
     }
 }
