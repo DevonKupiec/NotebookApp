@@ -12,15 +12,15 @@ namespace NotebookApp {
 
         List<IPageable> pages = new List<IPageable>();
 
-        public delegate void SimpleFuction(string command);
+        public delegate void SimpleFunction(string command);
         public delegate void BooleanFunction(bool isOn);
-        public event SimpleFuction ItemAdded, ItemRemoved, InputBadCommand;
+        public event SimpleFunction ItemAdded, ItemRemoved, InputBadCommand;
         public event BooleanFunction loggingToggled;
 
-        private Dictionary<string, SimpleFuction> commandLineArgs = new Dictionary<string, SimpleFuction>();
+        private Dictionary<string, SimpleFunction> commandLineArgs = new Dictionary<string, SimpleFunction>();
         public readonly string show = "show", _new = "new", delete = "delete", log = "logger";
 
-        public SimpleFuction this[string command] {
+        public SimpleFunction this[string command] {
             get { return commandLineArgs[command]; }
         }
 
