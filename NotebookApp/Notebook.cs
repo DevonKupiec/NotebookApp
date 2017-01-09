@@ -53,10 +53,7 @@ namespace NotebookApp
             }
         }
 
-        public SimpleFunction this[string command]
-        {
-            get { return commandLineArgs[command]; }
-        }
+        public SimpleFunction this[string command] => commandLineArgs[command];
 
         public event SimpleFunction ItemAdded , ItemRemoved , InputBadCommand;
         public event BooleanFunction loggingToggled;
